@@ -1,0 +1,66 @@
+---
+vm_name: sport
+path: /sport
+git_branch: master
+vm_os: ubuntu/trusty64
+environments:
+  - production
+package_bundles:
+  - curl
+  - graphics
+  - qt
+  
+manual_ruby_version: 
+server_name: localhost
+ruby_version: 2.2.1
+environment_file: /sport/.envrc
+databases:
+  - mysql
+background_jobs:
+  - delayed_job
+postgresql_orm: none
+mysql_orm: activerecord
+mongodb_orm: none
+redis_orm: none
+mongodb_db_name: myapp
+mysql_db_name: sport
+mysql_db_user: vagrant
+mysql_db_password: 111
+postgresql_db_name: myapp
+postgresql_db_user: vagrant
+postgresql_db_password: 
+postgresql_extensions:
+delayed_job_command: bin/delayed_job run
+sidekiq_command: sidekiq
+resque_command: rake resque:work
+server_type: nginx_puma
+git_url: git@bitbucket.org:dericjune1994/sport.git
+delayed_job_app_name: sport-delayed_job
+
+app_name: '{{ vm_name }}'
+user_name: '{{ "vagrant" if target == "virtualbox" else app_name }}'
+group_name: '{{ user_name }}'
+
+user_home_path: '/home/{{ user_name }}'
+
+ssl_certificate_path: /etc/nginx/ssl/{{ server_name }}.crt
+ssl_certificate_key_path: /etc/nginx/ssl/{{ server_name }}.key
+
+releases_path: '{{ path }}/releases'
+shared_path: '{{ path }}/shared'
+
+app_path: '{{ path }}{{ "/current" if target != "virtualbox" else "" }}'
+app_public_path: "{{ app_path }}/public"
+app_config_path: '{{ shared_path }}/config'
+shared_config_path: '{{ app_path if target == "virtualbox" else shared_path }}/config'
+app_temp_path: "/tmp{{ app_path }}"
+app_logs_path: "{{ app_path }}/log"
+
+use_apt_proxy: false
+
+rails_env: production
+target: server
+vm_swap: 1024
+host: 127.0.0.1
+port: 2222
+username: vagrant

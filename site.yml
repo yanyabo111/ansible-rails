@@ -1,0 +1,17 @@
+---
+- hosts: rails
+  gather_facts: no
+  roles:
+    - base
+    - swap
+    - mysql
+    - { role: ruby, tags: ruby }
+    - vim
+    - webserver
+    - nginx
+    # - puma
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
